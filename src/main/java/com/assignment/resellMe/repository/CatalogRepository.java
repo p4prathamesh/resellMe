@@ -1,6 +1,6 @@
-package com.assignment.resellMe.Repository;
+package com.assignment.resellMe.repository;
 
-import com.assignment.resellMe.Model.Catalog;
+import com.assignment.resellMe.model.Catalog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

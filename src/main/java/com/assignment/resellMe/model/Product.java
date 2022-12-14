@@ -1,4 +1,4 @@
-package com.assignment.resellMe.Model;
+package com.assignment.resellMe.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
