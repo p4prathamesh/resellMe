@@ -7,7 +7,6 @@ import com.assignment.resellMe.repository.BrandRepository;
 import com.assignment.resellMe.repository.CatalogRepository;
 import com.assignment.resellMe.repository.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.micrometer.observation.annotation.Observed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -45,7 +45,7 @@ public class ProductService {
         logger.info("saving list of products", " "+ Thread.currentThread().getName());
         try{
             //file path storage in db and file stored in resources
-            String path = "src/main/resources/"+fileName+".jpg";
+            String path = "src/main/resources/"+fileName;
             File file = new File(path);
             try (OutputStream os = new FileOutputStream(file)) {
                 os.write(multipartFile.getBytes());
@@ -70,6 +70,7 @@ public class ProductService {
                 List<Product> savedProductList = new ArrayList<>();
                 //code to save brand
                 Brand brand = catalog.getBrand();
+                brand.setCreatedDate(new Date());
                 Brand savedBrand = brandRepository.save(brand);
                 //code to save product
                 if (productList != null && productList.size() > 0) {
@@ -87,8 +88,9 @@ public class ProductService {
                     }
                 }
                 //code to save catalog
-                catalog.setBrand(brand);
+                catalog.setBrand(savedBrand);
                 catalog.setProductList(savedProductList);
+                catalog.setPostTime(new Date());
                 return catalogRepository.save(catalog);
             }
         }catch (Exception e){

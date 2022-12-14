@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,4 +26,7 @@ public class Catalog implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "brandId", referencedColumnName = "brandId")
     private Brand brand;
+
+    @Column
+    private Date postTime;
 }
