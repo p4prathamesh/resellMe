@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,8 +47,21 @@ public class ResellerService {
     }
 
     public List<Catalog> getAllBrandsByCatalogsSorted(){
+        List<Catalog> catalogList = new ArrayList<>();
         //to find brand object
-        
-        return null;
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by("createdDate").descending());
+        Page<Brand> brandsInDesc = brandRepository.findAll(pageable);
+        if(brandsInDesc!=null && brandsInDesc.getContent().size()>0){
+            List<Brand> brandList = brandsInDesc.getContent();
+            for(Brand brand: brandList){
+                //to find top 1 catalog of selected brand
+                Pageable pageableForCatalog = PageRequest.of(0, 1, Sort.by("postTime").descending());
+                Page<Catalog> catalogs = catalogRepository.findAllByBrand(brand, pageableForCatalog);
+                if(catalogs!=null && catalogs.getContent().size()>0) {
+                    catalogList.add(catalogs.getContent().get(0));
+                }
+            }
+        }
+        return catalogList;
     }
 }

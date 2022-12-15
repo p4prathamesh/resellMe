@@ -46,7 +46,7 @@ public class ResellersController {
     }
 
     @RequestMapping(value = "/get-all-brands", method = RequestMethod.POST)
-    public ResponseEntity getAllCatalogsOfBrand() {
+    public ResponseEntity getAllBrandsWithLatestCatalog() {
         try {
             List<Catalog> catalogList = resellerService.getAllBrandsByCatalogsSorted();
             if(catalogList!=null) {
