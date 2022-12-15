@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ResellerService {
     @Autowired
@@ -40,6 +42,12 @@ public class ResellerService {
             Pageable pageable = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize(), Sort.by(paginationRequest.getSortBy()).descending());
             return catalogRepository.findAllByBrand(brand, pageable);
         }
+        return null;
+    }
+
+    public List<Catalog> getAllBrandsByCatalogsSorted(){
+        //to find brand object
+        
         return null;
     }
 }

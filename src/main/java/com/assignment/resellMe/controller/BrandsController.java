@@ -1,13 +1,8 @@
 package com.assignment.resellMe.controller;
 
-import com.assignment.resellMe.model.Brand;
 import com.assignment.resellMe.model.Catalog;
-import com.assignment.resellMe.model.Product;
-import com.assignment.resellMe.repository.BrandRepository;
-import com.assignment.resellMe.repository.CatalogRepository;
 import com.assignment.resellMe.service.ProductService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.assignment.resellMe.service.ResponseMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +19,22 @@ public class BrandsController {
     @Autowired
     private ProductService productService;
 
-    @RequestMapping(value = "/upload/catalogs", method = RequestMethod.POST)
-    public ResponseEntity uploadCatalogs(@RequestParam(value = "file") MultipartFile[] files, @RequestParam(value = "catalog") String catalogJson) {
+    @Autowired
+    private ResponseMessageService responseMessageService;
+
+    @RequestMapping(value = "/upload/catalog", method = RequestMethod.POST)
+    public ResponseEntity uploadCatalog(@RequestParam(value = "file") MultipartFile[] files, @RequestParam(value = "catalog") String catalogJson) {
         try {
-            productService.saveCatalog(catalogJson, files);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            Catalog catalog = productService.saveCatalog(catalogJson, files);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(responseMessageService
+                            .generateMessage(catalog, 200));
         }catch (Exception e){
-            return null;
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(responseMessageService
+                            .generateMessage(e.getMessage(), 500));
         }
     }
 

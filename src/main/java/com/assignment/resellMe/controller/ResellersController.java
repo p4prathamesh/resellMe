@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/resellers")
 public class ResellersController {
@@ -39,7 +41,30 @@ public class ResellersController {
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(responseMessageService
-                            .generateMessage(null, 500));
+                            .generateMessage(e.getMessage(), 500));
+        }
+    }
+
+    @RequestMapping(value = "/get-all-brands", method = RequestMethod.POST)
+    public ResponseEntity getAllCatalogsOfBrand() {
+        try {
+            List<Catalog> catalogList = resellerService.getAllBrandsByCatalogsSorted();
+            if(catalogList!=null) {
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(responseMessageService
+                                .generateMessage(catalogList, 200));
+            }else{
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(responseMessageService
+                                .generateMessage(null, 500));
+            }
+        }catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(responseMessageService
+                            .generateMessage(e.getMessage(), 500));
         }
     }
 
